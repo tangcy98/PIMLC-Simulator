@@ -9,8 +9,17 @@
 #ifndef _MAINMEM_
 #define _MAINMEM_
 
-class Memory {
+#include <map>
+#include <bitset>
 
-};
+
+#define MEMLEN 256
+
+typedef std::map<int, std::bitset<MEMLEN>> Memory;
+typedef std::map<int, std::bitset<MEMLEN>>::iterator MemoryIter;
+
+// class Memory {
+
+// };
 
 #endif
