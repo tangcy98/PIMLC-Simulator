@@ -1,9 +1,9 @@
 /**  
  * @file    simulator.h
- * @brief   Simulator
+ * @brief   PIMLC Simulator
  * @author  Chenu Tang
- * @version 0.1
- * @date    2022-11-28
+ * @version 1.0
+ * @date    2023-02-09
  * @note    
  */
 #ifndef _SIMULATOR_
@@ -18,6 +18,8 @@
 #define SUBARRROWS 256
 #define SUBARRCOLS 256
 #define SUBARRNUM  64
+#define DEBUGMODE 0
+#define NORMALMODE 1
 
 namespace SimulatorCommand {
 enum Command {
@@ -43,8 +45,9 @@ private:
     uint input;
     uint output;
     int mode;
+    uint curtask;
 public:
-    Simulator();
+    Simulator(int m=DEBUGMODE);
     ~Simulator();
     int Init();
     int clear();
@@ -73,6 +76,7 @@ public:
     // 
     int openCode(const char *filename);
     int closeCode();
+    int setMode(int m);
     int setMem(int addr, std::bitset<MEMLEN> row);
     int setMem(int *indexes, int len, int offset, bool *value);
     int getInst(const char *str);

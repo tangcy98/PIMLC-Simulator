@@ -58,3 +58,6 @@ dkms.conf
 main
 tmp
 *.pdf
+obj_dir
+tb_*.cpp
+*.dat

@@ -1,3 +1,11 @@
+/**  
+ * @file    simulator.cpp
+ * @brief   PIMLC Simulator
+ * @author  Chenu Tang
+ * @version 1.0
+ * @date    2023-02-09
+ * @note    
+ */
 #include "simulator.h"
 #include <cstdio>
 #include <iostream>
@@ -42,14 +50,19 @@ void getaddr(const char *&p, int &addr, bool &flag)
     }
 }
 
-Simulator::Simulator()
+Simulator::Simulator(int m)
 {
     curline = 0;
-    mode = 0;
+    mode = m;
     *codeline = '\0';
     *cmdbuf = '\0';
-    cmd = SimulatorCommand::NOP;
-    cmdarg = 0;
+    if (mode==NORMALMODE) {
+        cmd = SimulatorCommand::RUN;
+    }
+    else {
+        cmd = SimulatorCommand::NOP;
+    }
+    cmdarg = -1;
     meshrows = 0u;
     meshcols = 0u;
     memoffset = 0u;
@@ -57,6 +70,7 @@ Simulator::Simulator()
     datasize = 0u;
     input = 0u;
     output = 0u;
+    curtask=0u;
 }
 
 Simulator::~Simulator()
@@ -102,7 +116,8 @@ int Simulator::printOutput(int len)
     }
     for (int i = 0; i < len; ++i) {
         for (int j = 0; j < output; ++j) {
-            printf("%d",(int)(mem[(input+j)*datasize+i/MEMLEN][i%MEMLEN]));
+            printf("mem[%d][%d]: %d\n",(input+j)*datasize+i/MEMLEN,i%MEMLEN,(int)(mem[(input+j)*datasize+i/MEMLEN][i%MEMLEN]));
+            // printf("%d",(int)(mem[(input+j)*datasize+i/MEMLEN][i%MEMLEN]));
         }
         printf("\n");
     }
@@ -269,7 +284,9 @@ int Simulator::run(int n)
     *codeline = '\0';
     while (curline < cmdarg) {
         if (codefile.eof()) {
-            printf("Last line %d: %s\n", curline-1, codeline);
+            if (mode == DEBUGMODE) {
+                printf("Last line %d: %s\n", curline-1, codeline);
+            }
             return 0;
         }
         *codeline = '\0';
@@ -280,7 +297,9 @@ int Simulator::run(int n)
             exec();
         }
     }
-    printf("Last line %d: %s\n", curline-1, codeline);
+    if (mode == DEBUGMODE) {
+        printf("Last line %d: %s\n", curline-1, codeline);
+    }
     return 1;
 }
 
@@ -370,6 +389,10 @@ int Simulator::exec()
     default:
         break;
     }
+    if (curtask && !memoffset) {
+        printf("n%d,%d\n", curtask, (int)(arrs[destarr].rows[destrow][0]));
+        curtask = 0u;
+    }
     return 1;
 }
 
@@ -425,6 +448,13 @@ int Simulator::closeCode()
     return 1;
 }
 
+int Simulator::setMode(int m)
+{
+    mode = m;
+    return m;
+}
+
+
 int Simulator::setMem(int addr, std::bitset<MEMLEN> row)
 {
     mem[addr] = row;
@@ -477,6 +507,15 @@ int Simulator::getInst(const char *str)
     getaddr(p, inst.src[2], inst.invflag[2]);
     bool tmp;
     getaddr(p, inst.dest, tmp);
+    const char *task = strstr(p, "Task.");
+    curtask = 0u;
+    if (task) {
+        task += 5;
+        while (*task<='9'&&*task>='0') {
+            curtask = curtask * 10 + *task - '0';
+            ++task;
+        }
+    }
     return 1;
 }
 
