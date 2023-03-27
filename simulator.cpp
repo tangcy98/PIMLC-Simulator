@@ -116,8 +116,8 @@ int Simulator::printOutput(int len)
     }
     for (int i = 0; i < len; ++i) {
         for (int j = 0; j < output; ++j) {
-            printf("mem[%d][%d]: %d\n",(input+j)*datasize+i/MEMLEN,i%MEMLEN,(int)(mem[(input+j)*datasize+i/MEMLEN][i%MEMLEN]));
-            // printf("%d",(int)(mem[(input+j)*datasize+i/MEMLEN][i%MEMLEN]));
+            // printf("mem[%d][%d]: %d\n",(input+j)*datasize+i/MEMLEN,i%MEMLEN,(int)(mem[(input+j)*datasize+i/MEMLEN][i%MEMLEN]));
+            printf("%d",(int)(mem[(input+j)*datasize+i/MEMLEN][i%MEMLEN]));
         }
         printf("\n");
     }
@@ -390,7 +390,7 @@ int Simulator::exec()
         break;
     }
     if (curtask && !memoffset) {
-        printf("n%d,%d\n", curtask, (int)(arrs[destarr].rows[destrow][0]));
+        // printf("n%d,%d\n", curtask, (int)(arrs[destarr].rows[destrow][0]));
         curtask = 0u;
     }
     return 1;

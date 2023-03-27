@@ -100,8 +100,8 @@ for bm in ${benchmarks[@]}; do
 
 
     rm -rf obj_dir
-    rm sim_${bm}_rst.txt
-    rm vrlt_${bm}_rst.txt
+    # rm sim_${bm}_rst.txt
+    # rm vrlt_${bm}_rst.txt
     if [ $random -ne 0 ]; then
         rm $testdata
     fi
