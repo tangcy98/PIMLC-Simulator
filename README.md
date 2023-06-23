@@ -1,6 +1,6 @@
 # PIMLC-Simulator
 
-This is the simulator to verify the functionality of PIMLC.
+This is the simulator to verify the functionality of PIMLC. We can compare the output of the simulator and verilator to test the functionality of our PIMLC.
 
 
 ## Usage

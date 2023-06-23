@@ -26,13 +26,17 @@ enum Command {
     NOP, NEXT, STEP, RUN, PRINT, ARRAY, MEMORY, EXEC,
 };
 }
+
+/**
+ * @brief Simulator Class
+*/
 class Simulator {
 private:
     int curline;
-    char cmdbuf[BUFSIZE];
-    char codeline[BUFSIZE];
-    SimulatorCommand::Command cmd;
-    int cmdarg;
+    char cmdbuf[BUFSIZE];   ///< work in command line mode
+    char codeline[BUFSIZE]; ///< instruction string
+    SimulatorCommand::Command cmd;  ///< Parsed command
+    int cmdarg; ///< Parsed command argument
     Subarray<SUBARRROWS, SUBARRCOLS> arrs[SUBARRNUM];
     std::ifstream codefile;
     Instruction inst;
@@ -73,7 +77,6 @@ public:
     int traverseMem();
 
 
-    // 
     int openCode(const char *filename);
     int closeCode();
     int setMode(int m);

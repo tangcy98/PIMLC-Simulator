@@ -15,6 +15,10 @@
 
 #define SKIPSPACES(p)  while (*(p)==' ' || *(p)=='\t' || *(p) == '\n' || *(p) == '\r') ++(p)
 
+/**
+ * @brief int strheadstr(const char *s, const char *sub)
+ * @details tool function to judge if a string's head is the specifig substring
+*/
 int strheadstr(const char *s, const char *sub)
 {
     int len = 0;
